@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
-import { Text, View, TextInput, TouchableOpacity} from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Alert, ToastAndroid} from 'react-native';
+import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter';
 import styles from './stylesheet'
 
 class Register extends Component{
@@ -16,6 +17,8 @@ class Register extends Component{
         }
     }
 
+    
+
     handleFirstName = (firstname) => {
         this.setState({firstname: firstname})
     }
@@ -28,11 +31,65 @@ class Register extends Component{
         this.setState({loginEmail: email})
     }
 
-    handlePassword = (password) => {
-        this.setState({loginPassword: password})
+    onChange = password =>{
+         this.setState({loginPassword: password })
     }
 
+
+    // handlePassword = (password) => {
+    //     let passwordLength = this.state.loginPassword.length
+    //     if (passwordLength < 6) {
+    //         ToastAndroid.show("Password must be longer than 6 characters!", ToastAndroid.SHORT);
+    //     }
+    //     this.setState({loginPassword: password})
+    // }
+
+
+   register() {
+
+
+    if(this.state.loginPassword.length < 6){
+            ToastAndroid.show("Password must be longer than 6 characters", ToastAndroid.SHORT)
+
+    }
+    else if(this.state.firstName.length < 1){
+
+    }
+    
+
+    else
+    {
+        return fetch("http://10.0.2.2:3333/api/1.0.0/user",  
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                first_name: this.state.firstName,
+                last_name: this.state.surname,
+                email: this.state.loginEmail,
+                password: this.state.loginPassword,
+
+            })
+
+            })
+            .then((response) => {
+                //Alert.alert("SUCCESS!");
+                console.log("HIT RESPONSE LOGIN");
+                //this.props.navigation('Login');
+                //return response.json()
+                //this.logIn();
+            })
+                .catch((error) => {
+                console.error(error);
+                
+        }) //end of return
+
+    } //end of else
+
+  }
+
   render(){
+
 
     return(
         <View style={styles.flexContainer}>
@@ -53,10 +110,15 @@ class Register extends Component{
 
             <TextInput style={styles.input} 
                     placeholder='Enter password:'
-                    onChangeText={this.handlePassword} 
+                    onChangeText={this.onChange} 
                     value={this.state.loginPassword} />
-                    
-            <TouchableOpacity style={styles.button}  >
+                <BarPasswordStrengthDisplay 
+                    password= { this.state.loginPassword } 
+                    width={200}
+                    minLength={1}
+                    />
+
+            <TouchableOpacity style={styles.button} onPress={() => this.register()} >
                 <Text style={styles.text}> Register User </Text>
             </TouchableOpacity>
         </View>

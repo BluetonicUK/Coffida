@@ -17,6 +17,7 @@ import { Text, View, Button } from 'react-native';
 import Home from './components/home';
 import Login from './components/login';
 import Register from './components/register';
+import UserHome from './components/user_home';
 
 
 
@@ -38,6 +39,7 @@ class App extends Component{
           <Stack.Screen name="Home" component={Home} options={{headerShown: false}} />
           <Stack.Screen name="Login" component={Login} options={{headerShown: false}} />
           <Stack.Screen name="Register" component={Register} options={{headerShown: false}} />
+          <Stack.Screen name="User Home" component={UserHome} options={{headerShown: false}} />
         </Stack.Navigator>        
       </NavigationContainer>  
     );

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import styles from './stylesheet'
+import UserHome from './user_home';
 
 
 class Login extends Component{
@@ -10,10 +11,17 @@ class Login extends Component{
         super(props);
 
         this.state = {
+            isLoading: true,
+            id: '',
             loginEmail: '',
-            loginPassword: ''
+            loginPassword: '',
+            authenticationKey: ''
         }
     }
+
+    // handleID = (id) => {
+    //     this.setState({id: id})
+    // }
 
     handleEmail = (email) => {
         this.setState({loginEmail: email})
@@ -21,6 +29,41 @@ class Login extends Component{
 
     handlePassword = (password) => {
         this.setState({loginPassword: password})
+    }
+
+    // handleAuthKey = (key) => {
+    //     this.setState({authenticationKey: key})
+    // }
+
+
+    //
+
+    logIn() {
+
+
+        return fetch("http://10.0.2.2:3333/api/1.0.0/user/login",  
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: this.state.loginEmail,
+                password: this.state.loginPassword,
+                //id: this.state.id,
+                //session_token: this.state.authenticationKey
+            })
+
+            })
+            .then((response) => {
+                Alert.alert("SUCCESS!");
+                console.log("get here??????");
+                this.props.navigation('User Home');
+                //return response.json()
+                //this.logIn();
+            })
+                .catch((error) => {
+                console.error(error);
+        })
+    
     }
 
 
@@ -40,7 +83,7 @@ class Login extends Component{
                 onChangeText={this.handlePassword}
                 value={this.state.loginPassword} />
 
-            <TouchableOpacity style={styles.button}  >
+            <TouchableOpacity style={styles.button} onPress={() => this.logIn()} >
                 <Text style={styles.text}> Login </Text>
             </TouchableOpacity>
         </View>

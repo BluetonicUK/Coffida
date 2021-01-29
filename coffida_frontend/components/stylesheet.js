@@ -36,5 +36,11 @@ export default StyleSheet.create({
         textAlign: 'center',
         color: 'black',
         padding: 8,
+    },
+
+    passwordBar:{
+        width: '50%',
+        marginLeft: 100,
+        marginRight: 100,
     }
 });
